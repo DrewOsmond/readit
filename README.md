@@ -1,6 +1,6 @@
 # readit
 
-A new Flutter project.
+A reddit clone using reddits API;
 
 ## Getting Started
 
