@@ -3,26 +3,19 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import './reddit_post.dart';
 import '../models/posts.dart';
+import '../controllers/images.dart';
 
-class RecentPosts extends StatefulWidget {
-  final String subreddit;
-
-  const RecentPosts({Key? key, required this.subreddit}) : super(key: key);
-
-  @override
-  _RecentPostsState createState() => _RecentPostsState(subreddit: subreddit);
-}
-
-class _RecentPostsState extends State<RecentPosts> {
+class RecentPosts extends StatelessWidget {
   final List<Post> posts = [];
   final String subreddit;
-  _RecentPostsState({required this.subreddit});
+
+  RecentPosts({Key? key, required this.subreddit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(subreddit),
+        title: Text("r/$subreddit"),
       ),
       body: FutureBuilder(
         future: _fetchPosts(),
@@ -63,6 +56,8 @@ class _RecentPostsState extends State<RecentPosts> {
           text: currPost['selftext'],
           upvotes: currPost['ups'],
           subreddit: currPost['subreddit'],
+          url: currPost['url'],
+          // img: currPost['url_overridden_by_dest'],
         ),
       );
     }
@@ -112,13 +107,21 @@ class _RecentPostsState extends State<RecentPosts> {
           children: <Widget>[
             ListTile(
               title: Text("r/${post.subreddit}"),
-              onTap: () => _redirectToSubreddit(context, post.subreddit),
+              onTap: () => post.subreddit != subreddit
+                  ? _redirectToSubreddit(context, post.subreddit)
+                  : null,
             ),
             ListTile(
               title: Text(post.title),
               onTap: () => _redirectToPost(context, post),
               // onTap: Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => RedditPost(post: post))),
+            ),
+            GestureDetector(
+              onTap: () => _redirectToPost(context, post),
+              child: Container(
+                child: Images.renderImage(post.url),
+              ),
             ),
           ],
         ));
