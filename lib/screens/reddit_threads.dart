@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import './reddit_post.dart';
+import '../models/posts.dart';
 
 class RecentPosts extends StatefulWidget {
   const RecentPosts({Key? key}) : super(key: key);
@@ -53,12 +54,13 @@ class _RecentPostsState extends State<RecentPosts> {
 
     for (var post in responsePosts) {
       Map<String, dynamic> currPost = post['data'];
-
       newPosts.add(
         Post(
-            title: currPost['title'],
-            text: currPost['selftext'],
-            upvotes: currPost['ups']),
+          title: currPost['title'],
+          text: currPost['selftext'],
+          upvotes: currPost['ups'],
+          subreddit: currPost['subreddit'],
+        ),
       );
     }
 
@@ -78,28 +80,29 @@ class _RecentPostsState extends State<RecentPosts> {
     );
   }
 
-  void _handleTap(BuildContext context, Post post) {
+  void _redirectToPost(BuildContext context, Post post) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => RedditPost(post: post)));
   }
 
+  void _redirectToSubreddit(BuildContext context, String subreddit) {}
+
   Widget _renderTile(BuildContext context, Post post) {
     return Container(
-      padding: const EdgeInsets.all(24.0),
-      child: ListTile(
-        title: Text(post.title),
-        onTap: () => _handleTap(context, post),
-        // onTap: Navigator.push(context,
-        //     MaterialPageRoute(builder: (context) => RedditPost(post: post))),
-      ),
-    );
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text("r/${post.subreddit}"),
+              onTap: () => _redirectToSubreddit(context, post.subreddit),
+            ),
+            ListTile(
+              title: Text(post.title),
+              onTap: () => _redirectToPost(context, post),
+              // onTap: Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => RedditPost(post: post))),
+            ),
+          ],
+        ));
   }
-}
-
-class Post {
-  final String text;
-  final String title;
-  final int upvotes;
-
-  Post({required this.text, required this.title, required this.upvotes});
 }

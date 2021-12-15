@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:readit/screens/recent_posts.dart';
+import 'package:readit/screens/reddit_threads.dart';
+import '../models/posts.dart';
 
 class RedditPost extends StatelessWidget {
   final Post post;
@@ -11,9 +12,6 @@ class RedditPost extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(post.title),
-      ),
-      body: Center(
-        child: Text(post.text),
       ),
     );
   }

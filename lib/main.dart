@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './screens/recent_posts.dart';
+import 'screens/reddit_threads.dart';
 
 void main() {
   runApp(const MyApp());
