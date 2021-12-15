@@ -25,8 +25,7 @@ class _RecentPostsState extends State<RecentPosts> {
         title: Text(subreddit),
       ),
       body: FutureBuilder(
-        future:
-            _fetchPosts(), //http.get(Uri.parse("https://www.reddit.com/r/popular.json")),
+        future: _fetchPosts(),
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
