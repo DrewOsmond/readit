@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:readit/controllers/images.dart';
+import 'package:readit/models/comments.dart';
 import 'package:readit/screens/reddit_threads.dart';
 import '../models/posts.dart';
 
@@ -38,7 +39,7 @@ class RedditPost extends StatelessWidget {
               const Divider(),
               FutureBuilder(
                 future: _fetchPost(),
-                builder: _buildPost,
+                builder: _buildComments,
               ),
             ],
           ),
@@ -46,22 +47,39 @@ class RedditPost extends StatelessWidget {
   }
 
   Future<http.Response> _fetchPost() async {
+    final String link = url.substring(1, url.length - 1);
     final http.Response response =
-        await http.get(Uri.parse("https://www.reddit.com/r"));
-    final Map<String, dynamic> resData = jsonDecode(response.body);
+        await http.get(Uri.parse("https://www.reddit.com/$link.json"));
+    print("https://www.reddit.com/$link.json");
+    final List<dynamic> resData = jsonDecode(response.body);
+    final List<dynamic> resComments = resData[1]['data']['children'];
+
+    final List<Comment> newComments = [];
+    for (Map comment in resComments) {
+      Map commentData = comment['data'];
+
+      if (commentData.containsKey('body')) {
+        newComments.add(
+          Comment(body: commentData['body']),
+        );
+      }
+    }
+
+    comments.addAll(newComments);
 
     return response;
   }
 
-  Widget _buildPost(BuildContext context, AsyncSnapshot snapshot) {
+  Widget _buildComments(BuildContext context, AsyncSnapshot snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {
       if (snapshot.hasError) {
+        print(snapshot.error);
         return const Center(
           child: Text("something went wrong!"),
         );
       }
 
-      return _renderPost();
+      return _renderComments();
     } else {
       return const Center(
         child: CircularProgressIndicator(),
@@ -69,7 +87,25 @@ class RedditPost extends StatelessWidget {
     }
   }
 
-  Widget _renderPost() {
-    return Container();
+  Widget _renderComments() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: comments.length,
+        itemBuilder: (context, index) =>
+            _renderComment(context, comments[index]),
+      ),
+      // separatorBuilder: (BuildContext context, int index) => const Divider(
+      // color: Colors.deepOrange,
+      // ),
+    );
+  }
+
+  Widget _renderComment(BuildContext context, Comment comment) {
+    return ListTile(
+      contentPadding: const EdgeInsets.all(32.0),
+      title: Text(comment.body),
+    );
+    // ListTile(
+    // );
   }
 }

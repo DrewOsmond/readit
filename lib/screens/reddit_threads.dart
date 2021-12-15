@@ -44,7 +44,7 @@ class RecentPosts extends StatelessWidget {
     final http.Response response =
         await http.get(Uri.parse("https://www.reddit.com/r/$subreddit.json"));
 
-    final Map<String, dynamic> resData = jsonDecode(response.body);
+    final Map<String, dynamic> resData = await jsonDecode(response.body);
     final List responsePosts = resData['data']['children'];
     final List<Post> newPosts = [];
 

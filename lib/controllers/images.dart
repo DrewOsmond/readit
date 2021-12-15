@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 class Images {
   static renderImage(String url) {
-    if (url.endsWith(".jpg") || url.endsWith(".jpg")) {
-      print(url);
+    if (url.endsWith(".jpg") || url.endsWith(".png")) {
       return Image.network(url);
     }
 
