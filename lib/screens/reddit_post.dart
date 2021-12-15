@@ -59,8 +59,9 @@ class RedditPost extends StatelessWidget {
       Map commentData = comment['data'];
 
       if (commentData.containsKey('body')) {
+        // print(commentData);
         newComments.add(
-          Comment(body: commentData['body']),
+          Comment(body: commentData['body'], author: commentData['author']),
         );
       }
     }
@@ -73,7 +74,6 @@ class RedditPost extends StatelessWidget {
   Widget _buildComments(BuildContext context, AsyncSnapshot snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {
       if (snapshot.hasError) {
-        print(snapshot.error);
         return const Center(
           child: Text("something went wrong!"),
         );
@@ -101,9 +101,20 @@ class RedditPost extends StatelessWidget {
   }
 
   Widget _renderComment(BuildContext context, Comment comment) {
-    return ListTile(
-      contentPadding: const EdgeInsets.all(32.0),
-      title: Text(comment.body),
+    return Column(
+      children: <Widget>[
+        ListTile(
+          contentPadding: const EdgeInsets.fromLTRB(24.0, 0.0, 0.0, 0.0),
+          title: Text(comment.author),
+        ),
+        ListTile(
+          contentPadding: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 8.0),
+          title: Text(comment.body),
+        ),
+        const Divider(
+          color: Colors.deepOrange,
+        ),
+      ],
     );
     // ListTile(
     // );
