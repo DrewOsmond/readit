@@ -19,7 +19,7 @@ class RecentPosts extends StatelessWidget {
       ),
       body: FutureBuilder(
         future: _fetchPosts(),
-        builder: (context, AsyncSnapshot<dynamic> snapshot) {
+        builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               return const Center(
@@ -56,7 +56,8 @@ class RecentPosts extends StatelessWidget {
           text: currPost['selftext'],
           upvotes: currPost['ups'],
           subreddit: currPost['subreddit'],
-          url: currPost['url'],
+          imgUrl: currPost['url'],
+          postLink: currPost['permalink'],
           // img: currPost['url_overridden_by_dest'],
         ),
       );
@@ -78,11 +79,40 @@ class RecentPosts extends StatelessWidget {
     );
   }
 
+  Widget _renderTile(BuildContext context, Post post) {
+    return Container(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            title: Text("r/${post.subreddit}"),
+            onTap: () => post.subreddit != subreddit
+                ? _redirectToSubreddit(context, post.subreddit)
+                : null,
+          ),
+          ListTile(
+            title: Text(post.title),
+            onTap: () => _redirectToPost(context, post),
+            // onTap: Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => RedditPost(post: post))),
+          ),
+          GestureDetector(
+            onTap: () => _redirectToPost(context, post),
+            child: Container(
+              child: Images.renderImage(post.imgUrl),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _redirectToPost(BuildContext context, Post post) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => RedditPost(
+          url: post.postLink,
           post: post,
         ),
       ),
@@ -98,32 +128,5 @@ class RecentPosts extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _renderTile(BuildContext context, Post post) {
-    return Container(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text("r/${post.subreddit}"),
-              onTap: () => post.subreddit != subreddit
-                  ? _redirectToSubreddit(context, post.subreddit)
-                  : null,
-            ),
-            ListTile(
-              title: Text(post.title),
-              onTap: () => _redirectToPost(context, post),
-              // onTap: Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => RedditPost(post: post))),
-            ),
-            GestureDetector(
-              onTap: () => _redirectToPost(context, post),
-              child: Container(
-                child: Images.renderImage(post.url),
-              ),
-            ),
-          ],
-        ));
   }
 }
