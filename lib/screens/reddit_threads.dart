@@ -5,20 +5,24 @@ import './reddit_post.dart';
 import '../models/posts.dart';
 
 class RecentPosts extends StatefulWidget {
-  const RecentPosts({Key? key}) : super(key: key);
+  final String subreddit;
+
+  const RecentPosts({Key? key, required this.subreddit}) : super(key: key);
 
   @override
-  _RecentPostsState createState() => _RecentPostsState();
+  _RecentPostsState createState() => _RecentPostsState(subreddit: subreddit);
 }
 
 class _RecentPostsState extends State<RecentPosts> {
   final List<Post> posts = [];
+  final String subreddit;
+  _RecentPostsState({required this.subreddit});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("recent posts"),
+        title: Text(subreddit),
       ),
       body: FutureBuilder(
         future:
@@ -46,7 +50,7 @@ class _RecentPostsState extends State<RecentPosts> {
 
   Future<http.Response> _fetchPosts() async {
     final http.Response response =
-        await http.get(Uri.parse("https://www.reddit.com/r/popular.json"));
+        await http.get(Uri.parse("https://www.reddit.com/r/$subreddit.json"));
 
     final Map<String, dynamic> resData = jsonDecode(response.body);
     final List responsePosts = resData['data']['children'];
@@ -81,11 +85,26 @@ class _RecentPostsState extends State<RecentPosts> {
   }
 
   void _redirectToPost(BuildContext context, Post post) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => RedditPost(post: post)));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RedditPost(
+          post: post,
+        ),
+      ),
+    );
   }
 
-  void _redirectToSubreddit(BuildContext context, String subreddit) {}
+  void _redirectToSubreddit(BuildContext context, String subreddit) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RecentPosts(
+          subreddit: subreddit,
+        ),
+      ),
+    );
+  }
 
   Widget _renderTile(BuildContext context, Post post) {
     return Container(
