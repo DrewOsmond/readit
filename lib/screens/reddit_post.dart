@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:readit/controllers/images.dart';
 import 'package:readit/models/comments.dart';
-import 'package:readit/screens/reddit_threads.dart';
 import '../models/posts.dart';
 
 class RedditPost extends StatelessWidget {

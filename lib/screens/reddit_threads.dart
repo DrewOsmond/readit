@@ -5,11 +5,11 @@ import './reddit_post.dart';
 import '../models/posts.dart';
 import '../controllers/images.dart';
 
-class RecentPosts extends StatelessWidget {
+class SubReddit extends StatelessWidget {
   final List<Post> posts = [];
   final String subreddit;
 
-  RecentPosts({Key? key, required this.subreddit}) : super(key: key);
+  SubReddit({Key? key, required this.subreddit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,7 @@ class _Post extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RecentPosts(
+        builder: (context) => SubReddit(
           subreddit: subreddit,
         ),
       ),

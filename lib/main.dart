@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/reddit_threads.dart';
+import './screens//navigation_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.orange),
-      home: RecentPosts(subreddit: "popular"),
+      home: const NavigationPage(),
+      // home: RecentPosts(subreddit: "popular"),
     );
   }
 }
