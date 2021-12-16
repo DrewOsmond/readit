@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:readit/screens/reddit_threads.dart';
+import 'package:readit/screens/subreddit.dart';
 
 class NavigationPage extends StatelessWidget {
   const NavigationPage({Key? key}) : super(key: key);

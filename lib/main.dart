@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/reddit_threads.dart';
+import 'screens/subreddit.dart';
 import './screens//navigation_screen.dart';
 
 void main() {
