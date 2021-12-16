@@ -29,7 +29,7 @@ class RecentPosts extends StatelessWidget {
               );
             }
 
-            return _renderPosts();
+            return _buildPosts();
           } else {
             return const Center(
               child: CircularProgressIndicator(),
@@ -67,19 +67,34 @@ class RecentPosts extends StatelessWidget {
     return response;
   }
 
-  Widget _renderPosts() {
+  Widget _buildPosts() {
     return Scrollbar(
       child: ListView.separated(
         itemCount: posts.length,
-        itemBuilder: (context, index) => _renderTile(context, posts[index]),
+        itemBuilder: (BuildContext context, index) =>
+            _Post(context: context, post: posts[index], subreddit: subreddit),
         separatorBuilder: (BuildContext context, int index) => const Divider(
           color: Colors.deepOrange,
         ),
       ),
     );
   }
+}
 
-  Widget _renderTile(BuildContext context, Post post) {
+class _Post extends StatelessWidget {
+  final Post post;
+  final BuildContext context;
+  final String subreddit;
+
+  const _Post(
+      {Key? key,
+      required this.post,
+      required this.context,
+      required this.subreddit})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -105,6 +120,7 @@ class RecentPosts extends StatelessWidget {
         ],
       ),
     );
+    // return Container();
   }
 
   void _redirectToPost(BuildContext context, Post post) {
