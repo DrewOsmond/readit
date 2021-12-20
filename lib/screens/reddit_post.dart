@@ -49,7 +49,6 @@ class RedditPost extends StatelessWidget {
     final String link = url.substring(1, url.length - 1);
     final http.Response response =
         await http.get(Uri.parse("https://www.reddit.com/$link.json"));
-    print("https://www.reddit.com/$link.json");
     final List<dynamic> resData = jsonDecode(response.body);
     final List<dynamic> resComments = resData[1]['data']['children'];
 
@@ -58,7 +57,6 @@ class RedditPost extends StatelessWidget {
       Map commentData = comment['data'];
 
       if (commentData.containsKey('body')) {
-        // print(commentData);
         newComments.add(
           Comment(body: commentData['body'], author: commentData['author']),
         );
@@ -93,9 +91,6 @@ class RedditPost extends StatelessWidget {
         itemBuilder: (context, index) =>
             _renderComment(context, comments[index]),
       ),
-      // separatorBuilder: (BuildContext context, int index) => const Divider(
-      // color: Colors.deepOrange,
-      // ),
     );
   }
 
@@ -115,7 +110,5 @@ class RedditPost extends StatelessWidget {
         ),
       ],
     );
-    // ListTile(
-    // );
   }
 }
