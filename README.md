@@ -1,5 +1,7 @@
 # readit
 
+a dart and flutter project 
+
 A reddit clone using reddits API;
 
 ## Getting Started
